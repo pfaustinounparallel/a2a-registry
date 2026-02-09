@@ -3,6 +3,7 @@ import { X } from 'lucide-react';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import InspectionDeck from './InspectionDeck';
+import AgentOperation from './AgentOperation';
 import { Button } from '@/components/ui/button';
 
 const Layout = ({
@@ -13,12 +14,11 @@ const Layout = ({
     allTags,
     selectedSkills,
     toggleSkillFilter,
-    conformanceFilter,
-    setConformanceFilter,
     selectedAgent,
     onCloseInspection
 }) => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [activeOperation, setActiveOperation] = useState(null);
 
     // Keyboard shortcut: "/" to focus search
     useEffect(() => {
@@ -61,9 +61,8 @@ const Layout = ({
                                 allTags={allTags}
                                 selectedSkills={selectedSkills}
                                 toggleSkillFilter={toggleSkillFilter}
-                                conformanceFilter={conformanceFilter}
-                                setConformanceFilter={setConformanceFilter}
                                 isMobile={true}
+                                setActiveOperation={setActiveOperation}
                             />
                         </div>
                     </div>
@@ -75,13 +74,20 @@ const Layout = ({
                         allTags={allTags}
                         selectedSkills={selectedSkills}
                         toggleSkillFilter={toggleSkillFilter}
-                        conformanceFilter={conformanceFilter}
-                        setConformanceFilter={setConformanceFilter}
+                        setActiveOperation={setActiveOperation}
                     />
                 </div>
 
                 <main className="flex-1 flex flex-col relative min-w-0 md:border-r border-zinc-800">
                     {children}
+
+                    {/* Agent Operation Panel */}
+                    {activeOperation && (
+                        <AgentOperation
+                            operation = {activeOperation}
+                            onClose = {() => setActiveOperation(null)}
+                        />
+                    )}
                 </main>
 
                 {selectedAgent && (
