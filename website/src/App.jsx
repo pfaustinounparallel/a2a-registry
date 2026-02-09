@@ -2,6 +2,8 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import Layout from './components/Layout';
 import AgentGrid from './components/AgentGrid';
 
+const POLL_INTERVAL_MS = 5000; // 5 seconds
+
 const A2ARegistry = () => {
   const [agents, setAgents] = useState([]);
   const [filteredAgents, setFilteredAgents] = useState([]);
@@ -27,31 +29,48 @@ const A2ARegistry = () => {
 
   // Load real data from registry.json
   useEffect(() => {
-    const controller = new AbortController();
+    let isMounted = true;
 
-    fetch('/registry.json', {
-      signal: controller.signal,
-      cache: 'force-cache'
-    })
-      .then(res => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
-      })
-      .then(data => {
+    const fetchRegistry = async () => {
+      try {
+        const res = await fetch('http://localhost:8000/registry', {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache',
+          },
+        });
+
+        if(!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
         const agentList = data.agents || [];
-        setAgents(agentList);
-        setFilteredAgents(agentList);
-        setLoading(false);
-      })
-      .catch(err => {
-        if (err.name !== 'AbortError') {
+
+        if (isMounted) {
+          setAgents(agentList);
+          setLoading(false);
+          setError(null);
+        }
+      } catch (err) {
+        if (isMounted) {
           console.error('Failed to load registry:', err);
           setError('Failed to load agent registry');
           setLoading(false);
         }
-      });
+      }
+    };
 
-    return () => controller.abort();
+    // Initial load
+    fetchRegistry();
+
+    // Polling
+    const interval = setInterval(fetchRegistry, POLL_INTERVAL_MS);
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, []);
 
   // URL Synchronization
@@ -65,7 +84,7 @@ const A2ARegistry = () => {
         if (found) setSelectedAgent(found);
       }
     }
-  }, [loading, agents]);
+  }, [loading, agents, selectedAgent]);
 
   useEffect(() => {
     // 2. Update URL when selection changes
@@ -165,6 +184,7 @@ const A2ARegistry = () => {
     );
   }, []);
 
+  // Render
   return (
     <Layout
       searchTerm={searchTerm}

@@ -7,13 +7,13 @@ import json
 import sys
 import argparse
 from pathlib import Path
-from typing import Dict, Any, Optional, List, Tuple
+from typing import Dict, Any, List, Tuple
 import urllib.request
 import urllib.error
 import ssl
 import time
 import gzip
-from jsonschema import validate, ValidationError, Draft7Validator
+from jsonschema import validate, ValidationError
 
 class AgentValidator:
     """Validates agent entries against A2A Protocol and Registry requirements."""
