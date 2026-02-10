@@ -241,7 +241,8 @@ async def search_agents(
                 or search_term in agent.description.lower()
                 or (agent.author and search_term in agent.author.lower())
                 or any(
-                    search_term in skill.name.lower() or any(search_term in tag.lower() for tag in skill.tags)
+                    search_term in skill.name.lower() 
+                    or any(search_term in tag.lower() for tag in skill.tags)
                     for skill in agent.skills
                 )
             )
@@ -250,9 +251,13 @@ async def search_agents(
 
         # Match skills filters (substring match)
         if skills_filters:
-            agent_skill_tags = [tag.lower() for skill in agent.skills for tag in skill.tags]
+            agent_skill_terms = []
+            for skill in agent.skills:
+                agent_skill_terms.append(skill.name.lower())
+                agent_skill_terms.extend(tag.lower() for tag in skill.tags)
+
             skill_matched = any(
-                any(filter_term in tag for tag in agent_skill_tags)
+                any(filter_term in term for term in agent_skill_terms)
                 for filter_term in skills_filters
             )
             if not skill_matched:

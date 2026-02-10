@@ -1,7 +1,7 @@
 {
   "protocolVersion": "0.3.0",
   "name": "IoT Catalogue Agent",
-  "description": "Agent for querying IoT components",
+  "description": "Agent for querying about IoT Catalogue components",
   "url": "http://127.0.0.1:10000/",
   "version": "1.0.0",
 
@@ -15,8 +15,8 @@
 
   "skills": [
     {
-      "id": "iot_catalogue_component_query",
-      "name": "IoT Catalogue Tool",
+      "id": "iot_catalogue_search",
+      "name": "Interact with the IoT Catalogue",
       "description": "Query IoT Catalogue components via IoT Catalogue MCP tools",
       "tags": ["iot catalogue", "component search"]
     }
