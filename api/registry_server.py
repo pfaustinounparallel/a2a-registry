@@ -17,7 +17,6 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 from fastapi import FastAPI, HTTPException, Query
-from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, HttpUrl
 
 # Import agent validator
@@ -172,6 +171,8 @@ validator = AgentValidator()
 # == FastAPI App ===
 app = FastAPI(title = "A2A Agent Registry API", description = "Live registry for A2A agents")
 
+# Testing with local frontend
+from fastapi.middleware.cors import CORSMiddleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins = ["http://localhost:5173"],

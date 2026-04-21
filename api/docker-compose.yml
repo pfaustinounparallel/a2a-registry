@@ -1,0 +1,16 @@
+services:
+  a2a-registry:
+    build: .
+    container_name: a2a-registry
+    command: ["uvicorn", "api.registry_server:app", "--host", "0.0.0.0", "--port", "8000"]
+    ports:
+      - "8000:8000" # Only for host access
+    volumes:
+      - ./docs:/app/docs
+    networks:
+      - iot-catalogue-net
+    restart: unless-stopped
+
+networks:
+  iot-catalogue-net:
+    external: true

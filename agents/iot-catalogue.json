@@ -1,12 +1,12 @@
 {
-  "protocolVersion": "0.3.0",
+  "protocolVersion": "1.0.0",
   "name": "IoT Catalogue Agent",
   "description": "Agent for querying about IoT Catalogue components",
-  "url": "http://127.0.0.1:10000/",
+  "url": "http://iot-catalogue:10000/",
   "version": "1.0.0",
 
   "author": "UNPARALLEL Innovation, Lda",
-  "wellKnownURI": "http://127.0.0.1:10000/.well-known/agent-card.json",
+  "wellKnownURI": "http://iot_catalogue:10000/.well-known/agent-card.json",
 
   "capabilities": {
     "streaming": true,
